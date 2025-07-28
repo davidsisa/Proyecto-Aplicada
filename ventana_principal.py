@@ -3,7 +3,7 @@ from tkinter import messagebox, font
 import subprocess
 import sys
 from PIL import Image, ImageTk
-
+import os
 COLOR_FONDO = "#e7f8e2"
 COLOR_BOTON = "#d4f4c0"
 COLOR_TEXTO_BOTON = "#0f5e2d"
@@ -32,11 +32,13 @@ def cerrar():
         root.destroy()
 
 def abrir_monitoreo():
+    
     root.destroy()
     try:
         subprocess.Popen([sys.executable, "ventana_monitoreo.py"])
     except Exception as e:
         subprocess.Popen(["python", "ventana_monitoreo.py"])
+
 def abrir_barras():
     root.destroy()
     try:
@@ -110,8 +112,8 @@ def cargar_icono_transparente(ruta, size):
     return ImageTk.PhotoImage(img)
 
 icon_size = (20, 20)
-icon_humedad = cargar_icono_transparente("analitica.png", icon_size)
-icon_rendimiento = cargar_icono_transparente("beneficios.png", icon_size)
+icon_humedad = cargar_icono_transparente("assets/analitica.png", icon_size)
+icon_rendimiento = cargar_icono_transparente("assets/beneficios.png", icon_size)
 
 btn_humedad = tk.Button(
     frame_derecha, 

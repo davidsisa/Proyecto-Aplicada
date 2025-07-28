@@ -2,10 +2,11 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import mysql.connector
 from mysql.connector import Error
-from conexion import conectar
+from database.conexion import conectar
 from datetime import datetime
 import subprocess
 import sys
+import os
 # Configuración de la conexión a la base de datos
 actualizacion_activa = True
 if conectar() is None:
@@ -119,7 +120,8 @@ def refrescar_datos(tree, ultimo_id_label, status_label, insertar_fila):
         return ultimo_id
     finally:
         if conexion: conexion.close()
-# Todo esto esta hecho con IA, no sabia como hacerlo a tiempo real 
+
+
 def actualizacion_automatica(tree, ultimo_id_label, status_label, insertar_fila):
     """Actualización automática cada 2 segundos"""
     global actualizacion_activa
@@ -254,7 +256,7 @@ def main():
     bottom_controls.pack(fill=tk.X, side=tk.BOTTOM, anchor="e", pady=5, padx=10)
 
     try:
-        img = tk.PhotoImage(file="refresh_icon.png")
+        img = tk.PhotoImage(file="assets/actualizar.png")
         img = img.subsample(10, 10) 
     except:
         img = None

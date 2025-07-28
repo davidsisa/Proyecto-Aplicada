@@ -5,7 +5,7 @@ from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.dates as mdates 
-from conexion import conectar  # Importa tu conexión existente
+from database.conexion import conectar  # Importa tu conexión existente
 import mysql.connector
 from PIL import Image, ImageTk
 

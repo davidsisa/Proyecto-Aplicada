@@ -2,7 +2,7 @@ import serial
 import mysql.connector
 from mysql.connector import Error
 import re
-from conexion import conectar
+from database.conexion import conectar
 puerto_serial = 'COM8'    
 baud_rate = 9600
 # Llama a la función conectar desde el módulo conexion.py

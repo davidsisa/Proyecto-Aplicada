@@ -5,14 +5,8 @@ import subprocess
 import sys
 import matplotlib.image as mpimg
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+from database.conexion import conectar
 
-def conectar():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="proyectofinal_aplicada"
-    )
 
 def obtener_valor_actual():
     try:
