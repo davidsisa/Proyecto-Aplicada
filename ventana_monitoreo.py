@@ -5,6 +5,7 @@ from mysql.connector import Error
 from conexion import conectar
 from datetime import datetime
 import subprocess
+import sys
 # Configuración de la conexión a la base de datos
 actualizacion_activa = True
 if conectar() is None:

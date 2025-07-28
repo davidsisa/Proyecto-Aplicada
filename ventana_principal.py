@@ -19,7 +19,7 @@ try:
 except:
     custom_font = font.Font(family="Arial", size=12)
 
-imagen_fondo = Image.open("hierba.png")
+imagen_fondo = Image.open("assets/cesped.png")
 esquina_size = (int(600*0.3), int(400*0.3))
 imagen_fondo = imagen_fondo.resize(esquina_size, Image.Resampling.LANCZOS)
 imagen_fondo = ImageTk.PhotoImage(imagen_fondo)
@@ -37,7 +37,17 @@ def abrir_monitoreo():
         subprocess.Popen([sys.executable, "ventana_monitoreo.py"])
     except Exception as e:
         subprocess.Popen(["python", "ventana_monitoreo.py"])
-
+def abrir_barras():
+    root.destroy()
+    try:
+        subprocess.Popen([sys.executable, "barras.py"])
+    except Exception:
+        subprocess.Popen(["python", "barras.py"])
+def ir_a_graficas():
+    # cierra esta ventana y lanza graficas.py
+    root.destroy()
+    subprocess.Popen([sys.executable, "graficas.py"])
+    
 titulo = tk.Label(
     root, 
     text="CONTROL DE RIEGO", 
@@ -112,7 +122,8 @@ btn_humedad = tk.Button(
     bg=COLOR_BOTON, 
     fg=COLOR_TEXTO_BOTON, 
     width=160, 
-    anchor="w"
+    anchor="w",
+    command=abrir_barras 
 )
 btn_humedad.image = icon_humedad
 btn_humedad.pack(pady=5)
@@ -139,7 +150,7 @@ btn_estado = tk.Button(
     fg=COLOR_TEXTO_BOTON, 
     width=15,
     height=1,
-    command=abrir_monitoreo 
+    command=ir_a_graficas
 )
 btn_estado.pack(pady=5)
 
@@ -156,5 +167,55 @@ btn_cerrar = tk.Button(
     pady=0
 )
 btn_cerrar.place(x=560, y=5)
+
+# Cargar iconos de ayuda y cerrar
+icon_pregunta = cargar_icono_transparente("assets/pregunta.png", (24, 24))
+icon_cerrar   = cargar_icono_transparente("assets/cerrar.png",  (24, 24))
+
+def mostrar_ayuda():
+    help_win = tk.Toplevel(root)
+    help_win.title("Ayuda")
+    help_win.geometry("450x350")           # un poco más ancha y alta
+    help_win.configure(bg=COLOR_FONDO)
+    help_win.resizable(False, False)
+
+    # Cargar icono de cerrar
+    icon_cerrar = cargar_icono_transparente("assets/cerrar.png", (24, 24))
+
+    # Botón de cierre en la esquina superior derecha
+    btn_cerrar_help = tk.Button(
+        help_win,
+        image=icon_cerrar,
+        bg=COLOR_FONDO,
+        bd=0,
+        command=help_win.destroy
+    )
+    btn_cerrar_help.image = icon_cerrar
+    btn_cerrar_help.place(x=410, y=10)     # ajusta según el tamaño
+
+    # Texto de bienvenida
+    texto = (
+        "Bienvenido!!\n\n"
+        "Esta pantalla te permite acceder a las funciones principales del sistema:\n\n"
+        "Pantalla de Monitoreo:\n"
+        "  Tabla con registros históricos de humedad por parcela.\n\n"
+        "Gráficos:\n"
+        "  - Humedad: evolución de la humedad en la parcela.\n"
+        "  - Rendimiento: rendimiento hídrico de la parcela.\n"
+        "  - Estado Actual: estado actual de la parcela.\n\n"
+        "Botón Rojo (X):\n"
+        "  Cierra completamente el programa."
+    )
+
+    lbl_help = tk.Label(
+        help_win,
+        text=texto,
+        justify="left",
+        wraplength=420,                    # aquí le dices hasta dónde envolver
+        bg=COLOR_FONDO,
+        font=("Arial", 10)
+    )
+    # Empaqueta aprovechando todo el espacio
+    lbl_help.pack(padx=15, pady=(50,15), fill=tk.BOTH, expand=True)
 
 root.mainloop()
