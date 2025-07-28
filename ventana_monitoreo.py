@@ -4,6 +4,7 @@ import mysql.connector
 from mysql.connector import Error
 from conexion import conectar
 from datetime import datetime
+import subprocess
 # Configuración de la conexión a la base de datos
 actualizacion_activa = True
 if conectar() is None:
@@ -180,6 +181,19 @@ def on_closing(root):
     global actualizacion_activa
     actualizacion_activa = False
     root.destroy()
+# Esta función se llama al cerrar la ventana, detiene la actualización automática y cierra la ventana
+# Ademas pasa un parametro root de la ventana actual para poder destruirla
+# Luego intenta abrir la ventana principal de nuevo
+# root.destroy() cierra la ventana actual
+def volver_a_principal(root):
+    global actualizacion_activa
+    actualizacion_activa = False  # Detener actualización automática
+    root.destroy()
+    try:
+        subprocess.Popen([sys.executable, "ventana_principal.py"])
+    except Exception as e:
+        subprocess.Popen(["python", "ventana_principal.py"])
+
 # Esta función es la carga principal de la ventana, es facil de hacer, solo se define el diseño y los botones
 # y se llama a las funciones de carga de datos y actualización automática
 def main():
@@ -243,6 +257,17 @@ def main():
         img = img.subsample(10, 10) 
     except:
         img = None
+    boton_volver = tk.Button(
+    bottom_controls,
+    text="← Volver",
+    bg="#AED581",
+    fg="#1B5E20",
+    font=("Helvetica", 9, "bold"),
+    relief=tk.FLAT,
+    command=lambda: volver_a_principal(root)
+    )
+    boton_volver.pack(side=tk.LEFT, padx=5, ipadx=5, ipady=3)
+
     boton_toggle = tk.Button(
         bottom_controls,
         image=img,
@@ -253,6 +278,7 @@ def main():
         relief=tk.FLAT,
         command=lambda: refrescar_datos(tree, ultimo_id_label, status_label, insertar_fila_con_separador)
     )
+
     boton_toggle.image = img
     boton_toggle.pack(side=tk.RIGHT, padx=5, ipadx=5, ipady=3)
 
@@ -266,6 +292,7 @@ def main():
         command=lambda: limpiar_registros(tree, ultimo_id_label, status_label)
     )
     boton_limpiar.pack(side=tk.RIGHT, padx=5, ipadx=5, ipady=3)
+    
 
     root.protocol("WM_DELETE_WINDOW", lambda: on_closing(root))
     actualizacion_automatica(tree, ultimo_id_label, status_label, insertar_fila_con_separador)
